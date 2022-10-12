@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="WTViewer.AllStacksView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:l="clr-namespace:WTViewer"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid Name="_root">
+        <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding SelectedStacks}"
+                 AlternationCount="2"
+                 HorizontalContentAlignment="Stretch" Grid.IsSharedSizeScope="True">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type l:Sive}">
+                    <Grid Name="Root" d:DesignWidth="247" d:DesignHeight="94" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="AllStacksViewCol0"/>
+                            <ColumnDefinition Width="*" SharedSizeGroup="AllStacksViewCol1"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding FriendlyName}" ToolTip="{Binding Name}" Grid.ColumnSpan="1" Grid.Column="1" />
+                        <Rectangle Height="0" Fill="#e0e0e0" Name="Rect1" Grid.ColumnSpan="2"  />
+                        <TextBlock TextWrapping="Wrap" Text="{Binding Count}" Margin="0,0,10,0"/>
+                    </Grid>
+
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                            <Setter TargetName="Rect1" Property="Height" Value="5" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </Grid>
+</UserControl>

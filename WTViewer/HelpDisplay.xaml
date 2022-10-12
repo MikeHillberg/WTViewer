@@ -1,0 +1,32 @@
+﻿<Window x:Class="WTViewer.HelpDisplay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WTViewer"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" SizeToContent="WidthAndHeight"
+        >
+    <StackPanel Margin="50">
+
+        <TextBlock>
+            Typical usage:  <LineBreak/>
+            (1)  Get a WT trace from windbg <LineBreak/>
+            (2)  Lad it with File|Load<LineBreak/>
+        </TextBlock>
+
+        <TextBlock Margin="0,10,0,0">
+            To get the WT trace, set a bp on a method, and when it hits:<LineBreak/><LineBreak/>
+                <Run xml:space="preserve">    .logopen c:\temp\trace.txt</Run><LineBreak/>
+                <Run xml:space="preserve">    wt</Run><LineBreak/>
+                <Run xml:space="preserve">    .logclose</Run><LineBreak/>
+            <LineBreak/>
+            (WT will trace until the return from the method)<LineBreak/>
+            Then load c:\temp\trace.txt with File|Load.
+            
+        </TextBlock>
+
+        <Button Margin="0,30,0,0" IsCancel="True" HorizontalAlignment="Center">Close</Button>
+            
+    </StackPanel>
+</Window>
