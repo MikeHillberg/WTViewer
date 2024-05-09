@@ -183,16 +183,14 @@ namespace WTViewer
             {
                 if (_count == 0)
                 {
-                    var paren = "inclusive";
                     var s = "^" + Name + "$";
-                    int callsIncludingNested = 0;
-
                     if (this is Inclusive)
                     {
-                        MainWindow.CountInclusive(MainWindow.StaticRoot, MainWindow.GetRegex(s), 0, null, 
-                            out _count,
-                            out _calls, 
-                            out callsIncludingNested);
+                        int callsIncludingNested;
+                        MainWindow.CountInclusive(MainWindow.StaticRoot, MainWindow.GetRegex(s), 0, null,
+                                out _count,
+                                out _calls,
+                                out callsIncludingNested);
 
                         if (callsIncludingNested > _calls)
                         {
@@ -207,7 +205,6 @@ namespace WTViewer
                     }
                     else
                     {
-                        paren = "exclusive";
                         _count = MainWindow.CountExclusive(MainWindow.StaticRoot, MainWindow.GetRegex(s), ref _calls);
                         _countString = String.Format("{0:N0} exclusive instructions across {1} chunks",
                                     _count, _calls);
@@ -308,9 +305,6 @@ namespace WTViewer
             }
         }
 
-        int _count = 0;
-        string _countString = null;
-        int _calls = 0;
         //public string TotalCount
         //{
         //    get

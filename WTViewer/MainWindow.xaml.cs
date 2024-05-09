@@ -278,7 +278,6 @@ namespace WTViewer
 
             int count = 0;
             var hitsIncludingNesting = 0;
-            bool foundFirst = false;
             CountInclusive(Root, GetRegex(_search.Text), minCost, _searchAncestor.Text.ToUpper(),
                 out count,
                 out hits,
@@ -497,24 +496,34 @@ namespace WTViewer
             try
             {
                 bool skip = false;
+                bool inHeader = true;
                 while (!reader.EndOfStream)
                 {
                     line = new Line();
                     var original = reader.ReadLine();
                     var str = original.Trim();
-                    string str2 = null;
                     line.SourceLineNumber = ++lineNumber;
 
                     if (string.IsNullOrEmpty(str))
                         continue;
 
+                    if (inHeader)
+                    {
+                        if (original.Contains(" 0]"))
+                        {
+                            inHeader = false;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
 
+                    // Look and skip for non-trace messages
                     if (original[0] != ' ')
                     {
-
                         if (str.StartsWith(">> More than one level popped"))
                         {
-                            int j = 0;
                             skip = true;
                         }
 
@@ -807,7 +816,7 @@ namespace WTViewer
         private void FileOpen(object sender, RoutedEventArgs e)
         {
             var ofn = new OpenFileDialog();
-            ofn.Filter = "WT trace files|*.wt";
+            ofn.Filter = "WT trace files|*.wt|Text files|*.txt|All files|*";
             if (true == ofn.ShowDialog())
             {
                 LoadFile(ofn.FileName); // Root
