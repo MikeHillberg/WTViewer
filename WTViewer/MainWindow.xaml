@@ -214,6 +214,9 @@
                             <TextBlock HorizontalAlignment="Left" Width="338"><Hyperlink Click="ShowAllCallers"><Run Text="Show all call stacks for this method"/></Hyperlink></TextBlock>
                         </StackPanel>
 
+
+                        <TextBlock Margin="6,10,0,0">Current call stack:</TextBlock>
+                        
                         <Grid Margin="6,10,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="DetailLevel" />

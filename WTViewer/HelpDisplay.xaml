@@ -22,6 +22,8 @@
                 <Run xml:space="preserve">    .logclose</Run><LineBreak/>
             <LineBreak/>
             (WT will trace until the return from the method)<LineBreak/>
+            <LineBreak/>
+            
             Then load c:\temp\trace.txt with File|Load.
             
         </TextBlock>

@@ -22,7 +22,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace WTViewer
-{     
+{
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -89,17 +89,12 @@ namespace WTViewer
 
             Loaded += (s, e) =>
                 {
-                    (new HelpDisplay()).ShowDialog();
-
-                    //if (_ic.Items.Count == 0)
-                    //    return;
-
-                    //var tvi = _ic.ItemContainerGenerator.ContainerFromIndex(0) as TreeViewItem;
-                    //if (tvi != null)
-                    //{
-                    //    tvi.IsSelected = true;
-                    //    tvi.Focus();
-                    //}
+                    // Delay to ensure this window goes on top of the main Window
+                    Dispatcher.BeginInvoke(new Action(()
+                    =>
+                    {
+                        Help(null,null);
+                    }), System.Windows.Threading.DispatcherPriority.Background);
                 };
 
         }
@@ -171,7 +166,7 @@ namespace WTViewer
             var sive = (sender as ListBox).SelectedItem as Sive;
             if (sive == null) return;
 
-            if( _selectedItem != null)
+            if (_selectedItem != null)
                 _selectedItem.IsSelected = false;
 
             _selectedItem = sive;
@@ -232,7 +227,7 @@ namespace WTViewer
         }
         public static readonly DependencyProperty SelectedItemProperty =
             DependencyProperty.Register("SelectedItem", typeof(Sive), typeof(MainWindow), new PropertyMetadata(null, SelectedItemChangedStatic));
-        static void SelectedItemChangedStatic( DependencyObject d, DependencyPropertyChangedEventArgs e)
+        static void SelectedItemChangedStatic(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             (d as MainWindow).SelectedItemVisibility = e.NewValue == null ? Visibility.Collapsed : Visibility.Visible;
         }
@@ -444,7 +439,7 @@ namespace WTViewer
             bw.DoWork += (s, e2) =>
                 {
                     MainWindow.CountInclusive(MainWindow.StaticRoot, MainWindow.GetRegex("ntdll.*!RtlAllocateHeap"), 0, null,
-                        out  count,
+                        out count,
                         out totalAllocations,
                         out nestedTotal);
 
@@ -565,12 +560,12 @@ namespace WTViewer
 
                 }
             }
-            catch( Exception )
+            catch (Exception)
             {
                 var sb = new StringBuilder();
                 sb.Append("Failed parsing ");
                 //if( line != null )
-                    sb.AppendFormat( "(line {0})", line.SourceLineNumber );
+                sb.AppendFormat("(line {0})", line.SourceLineNumber);
 
                 MessageBox.Show(sb.ToString());
                 return;
@@ -605,7 +600,7 @@ namespace WTViewer
                 var line = lines[index];
 
                 if (lines[index].Level == level)
-                {    
+                {
                     var exclusive = new Exclusive()
                     {
                         Count = line.Outer - runningCount,
@@ -774,7 +769,7 @@ namespace WTViewer
                     }
                     else if (regex.IsMatch(inc.Name) && inc.Count >= minCost)
                     {
-                        if( list != null )
+                        if (list != null)
                             list.Add(inc);
 
                         //SelectItem(inc);
@@ -795,7 +790,7 @@ namespace WTViewer
             return list.Count != 0;
         }
 
-        void SelectItem( Inclusive inc )
+        void SelectItem(Inclusive inc)
         {
             inc.IsExpanded = true;
 
@@ -816,7 +811,7 @@ namespace WTViewer
         private void FileOpen(object sender, RoutedEventArgs e)
         {
             var ofn = new OpenFileDialog();
-            ofn.Filter = "WT trace files|*.wt|Text files|*.txt|All files|*";
+            ofn.Filter = "Text files|*.txt|WT trace files|*.wt|All files|*";
             if (true == ofn.ShowDialog())
             {
                 LoadFile(ofn.FileName); // Root
@@ -879,7 +874,7 @@ namespace WTViewer
                     return;
 
                 var loaded = false;
-                if( File.Exists(filename))
+                if (File.Exists(filename))
                 {
                     LoadFile(filename); // Root
                     loaded = true;
@@ -893,7 +888,7 @@ namespace WTViewer
                 var index = _recentFiles.IndexOf(filename);
                 _recentFiles.RemoveAt(index);
 
-                if( loaded )
+                if (loaded)
                     _recentFiles.Insert(0, filename);
 
                 UpdateRegistry();
@@ -902,14 +897,14 @@ namespace WTViewer
 
         private void SetRoot(object sender, RoutedEventArgs e)
         {
-            if( _selectedItem == null )
+            if (_selectedItem == null)
                 return;
 
             Root.IsFakeRoot = false;
 
             var sive = _selectedItem;// _selectedTVI.Content as Sive;
             var inc = sive as Inclusive;
-            if( inc == null )
+            if (inc == null)
             {
                 var exc = sive as Exclusive;
                 inc = exc.Parent as Inclusive;
@@ -976,7 +971,10 @@ namespace WTViewer
 
         private void Help(object sender, RoutedEventArgs e)
         {
-            new HelpDisplay().ShowDialog();
+            //new HelpDisplay().ShowDialog();
+            var help = new HelpDisplay();
+            help.Owner = this;
+            help.ShowDialog();
         }
     }
 
